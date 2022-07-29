@@ -4,6 +4,44 @@ import base64 #used to download csv file, and converts ASCII
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+from PIL import Image
+import random
+
+
+# Function to get the base and decode the image
+def get_base64(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+# Function to use CSS and set the background to be png_file
+def set_background(png_file):
+    bin_str = get_base64(png_file)
+    page_bg_img = '''
+    <style>
+    .stApp {
+    background-image: url("data:image/png;base64,%s");
+    background-size: cover;
+    }
+    </style>
+    ''' % bin_str
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
+background_dict={
+	1:'bkg-logo.png',
+	2:'bkg-logo-2.png',
+	3:'bkg-logo-3.png',
+	4:'bkg-logo-4.png',
+	5: 'bkg-logo-5.png',
+	6:'bkg-logo-6.png',
+	7:'bkg-logo-7.png',
+	8:'bkg-logo-8.png',
+	9:'bkg-logo-9.png',
+	10:'bkg-logo-10.png'
+}
+set_background('bkg-logo-7.png')
+if st.button('CHANGE BACKGROUND'):
+
+	set_background(background_dict[random.randint(1,10)])
 
 # Naming the webapp
 st.title('NBA Players Stats Explorer \nby KeeObom')
@@ -63,6 +101,7 @@ st.markdown(filedownload(df_selected_team), unsafe_allow_html=True)
 
 # Heatmap
 # Using a button to show or hide heatmap
+st.set_option('deprecation.showPyplotGlobalUse', False)
 if st.button('Intercorrelation Heatmap'):
 	st.header('Intercorrelation Matrix Heatmap')
 	df_selected_team.to_csv('output.csv', index=False)
